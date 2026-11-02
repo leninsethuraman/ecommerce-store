@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ledger – Desk Goods Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f4f7;--surf:#fff;--ink:#14213d;--mut:#5b6679;--line:#dde2ea;--acc:#2b59ff;--accink:#fff;--ok:#16825f;--warn:#b57a00;--bad:#c62f3b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1424;--surf:#171f35;--ink:#eef1f8;--mut:#9aa6bd;--line:#2a3452;--acc:#6f8cff;--accink:#0e1424;--ok:#3ccf9f;--warn:#e6b73c;--bad:#ff7b86;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1424;--surf:#171f35;--ink:#eef1f8;--mut:#9aa6bd;--line:#2a3452;--acc:#6f8cff;--accink:#0e1424;--ok:#3ccf9f;--warn:#e6b73c;--bad:#ff7b86;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select{font:inherit;color:inherit}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surf);border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:12px 20px}
+.brand{font-weight:800;font-size:1.4rem;letter-spacing:-.02em;color:var(--ink);text-decoration:none;margin-right:auto}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav a,.btn{padding:8px 14px;border-radius:8px;text-decoration:none;color:var(--ink);border:1px solid transparent;background:none;cursor:pointer;font-weight:600}
+nav a:hover{background:var(--bg)}nav a.on{background:var(--ink);color:var(--surf)}
+.btn{background:var(--acc);color:var(--accink)}.btn.ghost{background:none;border-color:var(--line);color:var(--ink)}.btn.sm{padding:4px 10px;font-size:.85rem}.btn.bad{background:none;color:var(--bad);border-color:var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+main{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+h1{font-size:clamp(1.8rem,5vw,2.8rem);letter-spacing:-.03em;line-height:1.1;margin:0 0 6px;font-weight:800}
+h2{margin:28px 0 12px;font-size:1.25rem}
+.sub{color:var(--mut);margin:0 0 20px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:20px}
+input,select{background:var(--surf);border:1px solid var(--line);border-radius:8px;padding:9px 12px;width:100%}
+.bar input{max-width:280px}
+.chip{border:1px solid var(--line);background:var(--surf);border-radius:99px;padding:5px 14px;cursor:pointer;font-weight:600;font-size:.9rem}
+.chip.on{background:var(--ink);color:var(--surf);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.tile{height:130px;display:grid;place-items:center;font-size:3.4rem}
+.cb{padding:12px 14px 14px;display:flex;flex-direction:column;gap:2px;flex:1}
+.cb .row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:10px}
+.mut{color:var(--mut);font-size:.88rem}.price{font-weight:800}
+.low{color:var(--warn)}.out{color:var(--bad)}
+.panel{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+.tbl{width:100%;border-collapse:collapse}.tbl th,.tbl td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.wrap{overflow-x:auto}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;align-items:end}
+label{display:block;font-size:.85rem;color:var(--mut);margin-bottom:3px}
+.tl{list-style:none;display:flex;padding:0;margin:14px 0 4px}
+.tl li{flex:1;text-align:center;font-size:.85rem;color:var(--mut);position:relative;padding-top:20px}
+.tl li::before{content:"";position:absolute;top:4px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:var(--line);z-index:1}
+.tl li::after{content:"";position:absolute;top:9px;left:-50%;width:100%;height:2px;background:var(--line)}
+.tl li:first-child::after{display:none}
+.tl li.on{color:var(--ink);font-weight:600}.tl li.on::before,.tl li.on::after{background:var(--ok)}
+.pill{font-size:.8rem;font-weight:600;padding:2px 10px;border-radius:99px;background:var(--bg);border:1px solid var(--line)}
+.oh{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+#drawer{position:fixed;top:0;right:0;bottom:0;width:min(380px,100%);background:var(--surf);border-left:1px solid var(--line);z-index:10;transform:translateX(100%);transition:transform .2s;display:flex;flex-direction:column;padding:calc(16px + env(safe-area-inset-top,0px)) 18px calc(16px + env(safe-area-inset-bottom,0px))}
+#drawer.open{transform:none}
+#items{flex:1;overflow:auto}
+.ci{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ci .n{flex:1}.qty{display:flex;align-items:center;gap:6px}
+.modal{position:fixed;inset:0;background:rgba(10,15,30,.55);display:grid;place-items:center;z-index:20;padding:16px}
+.modal .panel{width:min(440px,100%);margin:0;display:grid;gap:12px}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--surf);padding:10px 18px;border-radius:8px;z-index:30;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.show{opacity:1}
+.hint{font-size:.85rem;color:var(--mut);background:var(--bg);border-radius:8px;padding:8px 12px}
+@media (prefers-reduced-motion:reduce){#drawer{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="#shop">Ledger</a>
+  <nav id="nav"></nav>
+  <button class="btn ghost" data-a="cart" aria-label="Open cart">Cart (<span id="cc">0</span>)</button>
+  <span id="acct"></span>
+</header>
+<main id="app"></main>
+<aside id="drawer" aria-label="Shopping cart">
+  <div class="oh"><h2 style="margin:0">Your cart</h2><button class="btn ghost sm" data-a="cart">Close</button></div>
+  <div id="items"></div>
+  <div class="oh" style="padding:12px 0"><strong>Total</strong><strong id="ct">₹0</strong></div>
+  <button class="btn" data-a="checkout">Check out</button>
+</aside>
+<div id="modal"></div>
+<div id="toast" role="status"></div>
+<script>
+/* ---- "Backend": a REST-style API over a tiny local database (swap for fetch() calls to Express + MySQL/Postgres/Mongo) ---- */
+var K="ledger-db-v1",KS="ledger-session";
+var seed={nid:100,users:[{id:1,name:"Admin",email:"admin@shop.com",pw:"admin123",role:"admin"},{id:2,name:"Demo User",email:"user@shop.com",pw:"user123",role:"user"}],
+products:[
+{id:1,name:"Dot-grid notebook",cat:"Paper",price:450,stock:24,em:"📓",hue:215},
+{id:2,name:"Brass fountain pen",cat:"Writing",price:2900,stock:6,em:"🖋️",hue:42},
+{id:3,name:"Walnut desk tray",cat:"Desk",price:1800,stock:10,em:"🪵",hue:28},
+{id:4,name:"Weekly planner pad",cat:"Paper",price:320,stock:40,em:"🗓️",hue:160},
+{id:5,name:"Gel pen set (8)",cat:"Writing",price:380,stock:3,em:"🖊️",hue:280},
+{id:6,name:"Task lamp",cat:"Desk",price:3400,stock:8,em:"💡",hue:50},
+{id:7,name:"Sticky tab flags",cat:"Paper",price:150,stock:0,em:"🔖",hue:340},
+{id:8,name:"Ceramic pen cup",cat:"Desk",price:690,stock:15,em:"🏺",hue:190}],orders:[]};
+var db;try{db=JSON.parse(localStorage.getItem(K))}catch(e){}if(!db)db=JSON.parse(JSON.stringify(seed));
+function save(){try{localStorage.setItem(K,JSON.stringify(db))}catch(e){}}
+var me=null;try{var sid=+localStorage.getItem(KS);me=db.users.find(function(u){return u.id===sid})||null}catch(e){}
+var api={
+ login:function(e,p){var u=db.users.find(function(x){return x.email===e.toLowerCase()&&x.pw===p});if(!u)throw Error("Email or password is incorrect.");return u},
+ register:function(n,e,p){e=e.toLowerCase();if(db.users.some(function(x){return x.email===e}))throw Error("That email already has an account.");var u={id:db.nid++,name:n,email:e,pw:p,role:"user"};db.users.push(u);save();return u},
+ saveProduct:function(p){if(p.id){Object.assign(db.products.find(function(x){return x.id===p.id}),p)}else{p.id=db.nid++;p.hue=Math.floor(Math.random()*360);db.products.push(p)}save()},
+ delProduct:function(id){db.products=db.products.filter(function(x){return x.id!==id});save()},
+ placeOrder:function(u,cart,info){var lines=cart.map(function(c){var p=db.products.find(function(x){return x.id===c.id});if(!p||p.stock<c.q)throw Error((p?p.name:"An item")+" is no longer available in that quantity.");return{id:p.id,name:p.name,price:p.price,q:c.q}});
+  lines.forEach(function(l){db.products.find(function(x){return x.id===l.id}).stock-=l.q});
+  var o={id:db.nid++,uid:u.id,who:u.name,lines:lines,total:lines.reduce(function(s,l){return s+l.price*l.q},0),status:0,date:new Date().toISOString(),ship:info};db.orders.unshift(o);save();return o},
+ setStatus:function(id,s){db.orders.find(function(o){return o.id===id}).status=s;save()}
+};
+/* ---- UI ---- */
+var STEPS=["Placed","Packed","Shipped","Delivered"],cart=[],cat="All",q="",editId=null,mode="login";
+var $=function(s){return document.querySelector(s)},app=$("#app");
+var money=function(n){return"₹"+Number(n).toLocaleString("en-IN")};
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function toast(m){var t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove("show")},2200)}
+function route(){return location.hash.slice(1)||"shop"}
+function tile(p){return'<div class="tile" style="background:hsl('+p.hue+',60%,'+(matchMedia("(prefers-color-scheme:dark)").matches?"24%":"90%")+')" aria-hidden="true">'+esc(p.em||"📦")+'</div>'}
+function stockTxt(p){return p.stock===0?'<span class="out">Out of stock</span>':p.stock<=5?'<span class="low">Only '+p.stock+' left</span>':'<span class="mut">In stock</span>'}
+
+function chrome(){
+ var r=route(),links=[["shop","Shop"]];if(me)links.push(["orders","My orders"]);if(me&&me.role==="admin")links.push(["admin","Admin"]);
+ $("#nav").innerHTML=links.map(function(l){return'<a href="#'+l[0]+'" class="'+(r===l[0]?"on":"")+'">'+l[1]+'</a>'}).join("");
+ $("#acct").innerHTML=me?'<span class="mut">'+esc(me.name)+' <span class="pill">'+me.role+'</span></span> <button class="btn ghost sm" data-a="logout">Log out</button>':'<a class="btn sm" href="#login">Log in</a>';
+ $("#cc").textContent=cart.reduce(function(s,c){return s+c.q},0);
+ var tot=0;$("#items").innerHTML=cart.length?cart.map(function(c){var p=db.products.find(function(x){return x.id===c.id});if(!p)return"";tot+=p.price*c.q;
+  return'<div class="ci"><div class="n"><strong>'+esc(p.name)+'</strong><div class="mut">'+money(p.price)+'</div></div><div class="qty"><button class="btn ghost sm" data-a="dec" data-id="'+p.id+'" aria-label="Decrease">−</button>'+c.q+'<button class="btn ghost sm" data-a="inc" data-id="'+p.id+'" aria-label="Increase">+</button></div></div>'}).join(""):'<p class="mut">Your cart is empty. Add something from the shop.</p>';
+ $("#ct").textContent=money(tot);
+}
+function shop(){
+ var cats=["All"].concat(db.products.map(function(p){return p.cat}).filter(function(c,i,a){return a.indexOf(c)===i}));
+ var list=db.products.filter(function(p){return(cat==="All"||p.cat===cat)&&p.name.toLowerCase().indexOf(q.toLowerCase())>-1});
+ return'<h1>Tools for a tidy desk.</h1><p class="sub">Paper, pens and desk goods. Free delivery over ₹999.</p><div class="bar"><input id="q" type="search" placeholder="Search products" value="'+esc(q)+'" aria-label="Search products">'+
+ cats.map(function(c){return'<button class="chip '+(c===cat?"on":"")+'" data-a="cat" data-v="'+esc(c)+'">'+esc(c)+'</button>'}).join("")+'</div>'+
+ (list.length?'<div class="grid">'+list.map(function(p){return'<div class="card">'+tile(p)+'<div class="cb"><strong>'+esc(p.name)+'</strong><span class="mut">'+esc(p.cat)+' · '+stockTxt(p)+'</span><div class="row"><span class="price">'+money(p.price)+'</span><button class="btn sm" data-a="add" data-id="'+p.id+'"'+(p.stock?"":" disabled")+'>Add to cart</button></div></div></div>'}).join("")+'</div>':'<p class="mut">No products match. Try another search or category.</p>')}
+function login(){
+ var reg=mode==="register";
+ return'<div class="panel" style="max-width:420px;margin:30px auto"><h1 style="font-size:1.8rem">'+(reg?"Create account":"Log in")+'</h1><form data-f="auth" style="display:grid;gap:12px">'+
+ (reg?'<div><label for="n">Name</label><input id="n" required></div>':"")+'<div><label for="e">Email</label><input id="e" type="email" required></div><div><label for="p">Password</label><input id="p" type="password" minlength="6" required></div>'+
+ '<button class="btn">'+(reg?"Create account":"Log in")+'</button></form><p><button class="btn ghost sm" data-a="mode">'+(reg?"I already have an account":"New here? Create an account")+'</button></p>'+
+ '<div class="hint">Demo logins – Admin: admin@shop.com / admin123 · User: user@shop.com / user123</div></div>'}
+function tl(o){return'<ol class="tl">'+STEPS.map(function(s,i){return'<li class="'+(i<=o.status?"on":"")+'">'+s+'</li>'}).join("")+'</ol>'}
+function ordersView(){
+ if(!me)return'<p>Please <a href="#login">log in</a> to see your orders.</p>';
+ var os=db.orders.filter(function(o){return o.uid===me.id});
+ return'<h1>My orders</h1><p class="sub">Track each order from placed to delivered.</p>'+(os.length?os.map(function(o){return'<div class="panel"><div class="oh"><strong>Order #'+o.id+'</strong><span class="pill">'+STEPS[o.status]+'</span></div><div class="mut">'+new Date(o.date).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})+' · '+money(o.total)+'</div>'+tl(o)+
+  '<div class="mut">'+o.lines.map(function(l){return esc(l.name)+" ×"+l.q}).join(", ")+'</div></div>'}).join(""):'<p class="mut">No orders yet. <a href="#shop">Start shopping</a>.</p>')}
+function admin(){
+ if(!me||me.role!=="admin")return'<p>This page is for admins only. <a href="#login">Log in as admin</a>.</p>';
+ var e=db.products.find(function(p){return p.id===editId})||{name:"",cat:"",price:"",stock:"",em:""};
+ return'<h1>Admin</h1><p class="sub">Manage products and update order status.</p><div class="panel"><strong>'+(editId?"Edit product":"Add product")+'</strong><form data-f="prod" class="fgrid" style="margin-top:10px">'+
+ '<div><label for="a1">Name</label><input id="a1" required value="'+esc(e.name)+'"></div><div><label for="a2">Category</label><input id="a2" required value="'+esc(e.cat)+'"></div><div><label for="a3">Price (₹)</label><input id="a3" type="number" min="1" required value="'+e.price+'"></div><div><label for="a4">Stock</label><input id="a4" type="number" min="0" required value="'+e.stock+'"></div><div><label for="a5">Emoji</label><input id="a5" maxlength="4" value="'+esc(e.em||"")+'"></div>'+
+ '<div><button class="btn">'+(editId?"Save changes":"Add product")+'</button>'+(editId?' <button type="button" class="btn ghost" data-a="canc">Cancel</button>':"")+'</div></form></div>'+
+ '<h2>Products</h2><div class="wrap"><table class="tbl"><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th></th></tr>'+db.products.map(function(p){return'<tr><td>'+esc(p.em||"")+" "+esc(p.name)+'</td><td>'+esc(p.cat)+'</td><td>'+money(p.price)+'</td><td>'+p.stock+'</td><td><button class="btn ghost sm" data-a="edit" data-id="'+p.id+'">Edit</button> <button class="btn bad sm" data-a="del" data-id="'+p.id+'">Delete</button></td></tr>'}).join("")+'</table></div>'+
+ '<h2>Orders</h2>'+(db.orders.length?'<div class="wrap"><table class="tbl"><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th></tr>'+db.orders.map(function(o){return'<tr><td>#'+o.id+'</td><td>'+esc(o.who)+'<div class="mut">'+esc(o.ship.address)+'</div></td><td>'+money(o.total)+'</td><td><select data-a="status" data-id="'+o.id+'" aria-label="Status for order '+o.id+'">'+STEPS.map(function(s,i){return'<option value="'+i+'"'+(i===o.status?" selected":"")+'>'+s+'</option>'}).join("")+'</select></td></tr>'}).join("")+'</table></div>':'<p class="mut">No orders have been placed yet.</p>')}
+function render(){var r=route();app.innerHTML=r==="login"?login():r==="orders"?ordersView():r==="admin"?admin():shop();chrome();var s=$("#q");if(s&&document.activeElement===document.body&&q){s.focus();s.setSelectionRange(q.length,q.length)}}
+
+document.addEventListener("click",function(ev){
+ var t=ev.target.closest("[data-a]");if(!t||t.tagName==="SELECT")return;var a=t.dataset.a,id=+t.dataset.id;
+ if(a==="cart"){$("#drawer").classList.toggle("open");return}
+ if(a==="cat"){cat=t.dataset.v}
+ if(a==="add"){var c=cart.find(function(x){return x.id===id}),p=db.products.find(function(x){return x.id===id});if(c&&c.q>=p.stock){toast("No more stock for "+p.name+".");return}c?c.q++:cart.push({id:id,q:1});toast("Added "+p.name+" to cart.")}
+ if(a==="inc"){var c2=cart.find(function(x){return x.id===id}),p2=db.products.find(function(x){return x.id===id});if(c2.q<p2.stock)c2.q++;else toast("That is all we have in stock.")}
+ if(a==="dec"){var c3=cart.find(function(x){return x.id===id});c3.q--;cart=cart.filter(function(x){return x.q>0})}
+ if(a==="mode"){mode=mode==="login"?"register":"login"}
+ if(a==="logout"){me=null;try{localStorage.removeItem(KS)}catch(e){}cart=[];location.hash="shop";toast("Logged out.")}
+ if(a==="edit"){editId=id}if(a==="canc"){editId=null}
+ if(a==="del"){api.delProduct(id);cart=cart.filter(function(x){return x.id!==id});toast("Product deleted.")}
+ if(a==="checkout"){if(!cart.length){toast("Your cart is empty.");return}if(!me){$("#drawer").classList.remove("open");location.hash="login";toast("Log in to check out.");return}
+  var tot=cart.reduce(function(s,c){var p=db.products.find(function(x){return x.id===c.id});return s+p.price*c.q},0);
+  $("#modal").innerHTML='<div class="modal"><div class="panel"><h2 style="margin:0">Checkout · '+money(tot)+'</h2><form data-f="co" style="display:grid;gap:12px"><div><label for="c1">Delivery address</label><input id="c1" required placeholder="Street, city, PIN"></div><div><label for="c2">Payment</label><select id="c2"><option>Cash on delivery</option><option>UPI (demo)</option></select></div><button class="btn">Place order</button><button type="button" class="btn ghost" data-a="x">Cancel</button></form></div></div>';return}
+ if(a==="x"){$("#modal").innerHTML="";return}
+ render()});
+document.addEventListener("change",function(ev){var t=ev.target;if(t.dataset.a==="status"){api.setStatus(+t.dataset.id,+t.value);toast("Order status updated.");render()}});
+document.addEventListener("input",function(ev){if(ev.target.id==="q"){q=ev.target.value;var pos=q.length;render();var s=$("#q");s.focus();s.setSelectionRange(pos,pos)}});
+document.addEventListener("submit",function(ev){ev.preventDefault();var f=ev.target.dataset.f,g=function(i){return document.getElementById(i).value.trim()};
+ try{
+  if(f==="auth"){me=mode==="register"?api.register(g("n"),g("e"),document.getElementById("p").value):api.login(g("e"),document.getElementById("p").value);try{localStorage.setItem(KS,me.id)}catch(e){}toast("Welcome, "+me.name+".");location.hash=me.role==="admin"?"admin":"shop"}
+  if(f==="prod"){api.saveProduct({id:editId||0,name:g("a1"),cat:g("a2"),price:+g("a3"),stock:+g("a4"),em:g("a5")||"📦"});toast(editId?"Product saved.":"Product added.");editId=null}
+  if(f==="co"){var o=api.placeOrder(me,cart,{address:g("c1"),pay:document.getElementById("c2").value});cart=[];$("#modal").innerHTML="";$("#drawer").classList.remove("open");toast("Order #"+o.id+" placed.");location.hash="orders"}
+ }catch(err){toast(err.message)}
+ render()});
+window.addEventListener("hashchange",render);render();
+</script>
+</body>
+</html>
